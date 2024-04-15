@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("http://localhost:8080/realms/external/protocol/openid-connect/logout?redirect_uri=http://localhost:8081/"));
+                        .logoutSuccessUrl("http://10.19.4.2:8080/realms/external/protocol/openid-connect/logout?redirect_uri=http://localhost:8081/"));
 
 
         return http.build();
