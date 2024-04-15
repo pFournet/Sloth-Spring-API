@@ -8,23 +8,36 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * <pre>
+ *     com.edw.config.SecurityConfiguration
+ * </pre>
+ *
+ * @author Muhammad Edwin < edwin at redhat dot com >
+ * 21 Mar 2023 20:16
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+
+
         http
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/problems").permitAll()
+
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**").permitAll()
                         .anyRequest().authenticated()
                 )
+
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/realms/External")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/post-logout-page"));
+                        .logoutSuccessUrl("http://localhost:8080/realms/external/protocol/openid-connect/logout?redirect_uri=http://localhost:8081/"));
+
 
         return http.build();
     }
