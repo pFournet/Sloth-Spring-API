@@ -20,11 +20,11 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/realms/External")
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .permitAll());
+                        .logoutSuccessUrl("/post-logout-page"));
 
         return http.build();
     }
