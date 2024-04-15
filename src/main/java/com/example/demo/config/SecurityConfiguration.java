@@ -14,21 +14,18 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
+                .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**").permitAll()
                         .anyRequest().authenticated()
                 )
-
-                .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/keycloak")  // Keycloak redirect URI
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("http://10.19.4.2:8080/realms/external/protocol/openid-connect/logout?redirect_uri=http://10.19.4.2:8081/"));
-
-
+                        .logoutSuccessUrl("/logout-success-url")  // Customize your logout success URL
+                );
         return http.build();
     }
 }
