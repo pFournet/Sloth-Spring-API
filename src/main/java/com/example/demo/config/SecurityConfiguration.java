@@ -20,7 +20,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/realms/External")
                         .permitAll()
                 )
                 .logout(logout -> logout
