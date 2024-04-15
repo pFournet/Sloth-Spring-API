@@ -8,14 +8,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import static org.springframework.security.config.Customizer.withDefaults;
 
-/**
- * <pre>
- *     com.edw.config.SecurityConfiguration
- * </pre>
- *
- * @author Muhammad Edwin < edwin at redhat dot com >
- * 21 Mar 2023 20:16
- */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
