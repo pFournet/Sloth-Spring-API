@@ -7,14 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
-/**
- * <pre>
- *     com.edw.controller.IndexController
- * </pre>
- *
- * @author Muhammad Edwin < edwin at redhat dot com >
- * 21 Mar 2023 20:09
- */
 @RestController
 public class IndexController {
 

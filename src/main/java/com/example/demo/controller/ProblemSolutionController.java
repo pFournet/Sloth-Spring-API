@@ -28,11 +28,7 @@ public class ProblemSolutionController {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @PostMapping("/problems")
-    public ResponseEntity<List<String>> getResponses(@RequestBody String problem) {
-        // Construire la requête à envoyer à l'API Python
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("phrase", problem);
-
+    public ResponseEntity<List<String>> getResponses(@RequestBody Map<String, String> requestBody) {
         // Utiliser RestTemplate pour envoyer une requête POST à l'API Python
         String url = pythonApiUrl + "/predict"; // s'assurer que c'est l'URL correcte
         ResponseEntity<Map> response = restTemplate.postForEntity(url, requestBody, Map.class);
@@ -48,8 +44,11 @@ public class ProblemSolutionController {
     }
 
     @PostMapping("/solutions")
-    public ResponseEntity<ProblemSolution> saveSolution(@RequestBody ProblemSolution problemSolution) {
-        ProblemSolution saved = repository.save(problemSolution);
-        return ResponseEntity.ok(saved);
+    public ResponseEntity<List<ProblemSolution>> saveSolutions(@RequestBody List<ProblemSolution> problemSolutions) {
+        List<ProblemSolution> savedSolutions = problemSolutions.stream()
+                .map(solution -> repository.save(solution))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(savedSolutions);
     }
+
 }
