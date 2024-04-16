@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("http://10.19.4.2:8080/")
+                        .loginPage("http://10.19.4.2:8080/login")
                         .permitAll()
                 )
                 .logout(logout -> logout
