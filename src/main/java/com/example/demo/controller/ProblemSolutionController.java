@@ -58,8 +58,10 @@ public class ProblemSolutionController {
     }
 
     @PostMapping("/submit-problem-solution")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<ProblemSolution> submitProblemSolution(@RequestBody ProblemSolution problemSolution) {
         ProblemSolution savedSolution = repository.save(problemSolution);
         return ResponseEntity.ok(savedSolution);
     }
+
 }
