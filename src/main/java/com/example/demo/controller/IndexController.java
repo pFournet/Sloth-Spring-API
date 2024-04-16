@@ -37,7 +37,7 @@ public class IndexController {
         // Get the current authenticated user
         OAuth2User user = (OAuth2User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        // Check if the user has ROLE_ADMIN authority
+        // Check if the user has admin authority
         if (user.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("admin"))) {
             // Send POST request to the external Python API with the phrase provided by the user
             ResponseEntity<String> response = restTemplate.postForEntity(pythonApiUrl + "/predict", requestBody, String.class);

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.security.access.annotation.Secured;
+
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,8 @@ public class ProblemSolutionController {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @PostMapping("/problems")
-    public ResponseEntity<List<String>> getResponses(@RequestBody Map<String, String> requestBody) {
+    @Secured({"client", "admin"}) // Ajustez selon les rôles exacts que vous utilisez
+    public ResponseEntity<List<Map<String, Object>>> getResponses(@RequestBody Map<String, String> requestBody) {
         String url = pythonApiUrl + "/predict";
         ResponseEntity<Map> response = restTemplate.postForEntity(url, requestBody, Map.class);
 
@@ -35,12 +38,10 @@ public class ProblemSolutionController {
 
         List<Map<String, Object>> predictions = (List<Map<String, Object>>) response.getBody().get("predictions");
 
-        List<String> solutions = predictions.stream()
-                .map(prediction -> (String) prediction.get("label"))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(solutions);
+        // Here, we return the entire Map, not just the label
+        return ResponseEntity.ok(predictions);
     }
+
 
     @PostMapping("/solutions")
     public ResponseEntity<List<ProblemSolution>> saveSolutions(@RequestBody List<ProblemSolution> problemSolutions) {
