@@ -8,12 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.stream.Collectors;
-
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -29,18 +26,20 @@ public class ProblemSolutionController {
 
     @PostMapping("/problems")
     public ResponseEntity<List<String>> getResponses(@RequestBody Map<String, String> requestBody) {
-        // Utiliser RestTemplate pour envoyer une requête POST à l'API Python
-        String url = pythonApiUrl + "/predict"; // s'assurer que c'est l'URL correcte
+        String url = pythonApiUrl + "/predict";
         ResponseEntity<Map> response = restTemplate.postForEntity(url, requestBody, Map.class);
 
-        // Extraire les prédictions de la réponse
+        if (response.getBody() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
         List<Map<String, Object>> predictions = (List<Map<String, Object>>) response.getBody().get("predictions");
 
-        // Extraire et retourner uniquement les labels des prédictions
-        List<String> responses = predictions.stream()
-                .map(prediction -> prediction.get("label").toString())
+        List<String> solutions = predictions.stream()
+                .map(prediction -> (String) prediction.get("label"))
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
+
+        return ResponseEntity.ok(solutions);
     }
 
     @PostMapping("/solutions")
@@ -48,7 +47,7 @@ public class ProblemSolutionController {
         List<ProblemSolution> savedSolutions = problemSolutions.stream()
                 .map(solution -> repository.save(solution))
                 .collect(Collectors.toList());
+
         return ResponseEntity.ok(savedSolutions);
     }
-
 }
