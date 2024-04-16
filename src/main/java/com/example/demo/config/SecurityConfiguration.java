@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("http://10.19.4.2:8080/realms/External/protocol/openid-connect/auth")
+                        .loginPage("http://10.19.4.2:8080/")
                         .permitAll()
                 )
                 .logout(logout -> logout
