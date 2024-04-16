@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.security.access.annotation.Secured;
-
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ public class ProblemSolutionController {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @PostMapping("/problems")
-    @Secured({"client", "admin"}) // Ajustez selon les rôles exacts que vous utilisez
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> getResponses(@RequestBody Map<String, String> requestBody) {
         String url = pythonApiUrl + "/predict";
         ResponseEntity<Map> response = restTemplate.postForEntity(url, requestBody, Map.class);
