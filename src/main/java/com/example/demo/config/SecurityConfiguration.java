@@ -9,8 +9,13 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.web.SecurityFilterChain;
 
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.context.annotation.Configuration;
+
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfiguration {
 
     @Bean
