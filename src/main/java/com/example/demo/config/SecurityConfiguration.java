@@ -35,11 +35,15 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/unauthenticated", "/oauth2/**", "/login/**").permitAll()
-                        .anyRequest().authenticated())
-                .oauth2Login(oauthLogin -> oauthLogin
-                        .loginPage("/sso/login")) // URL personnalisée pour Keycloak
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("http://10.19.4.2:8080/auth/realms/external/protocol/openid-connect/auth")
+                        .permitAll()
+                )
                 .logout(logout -> logout
                         .logoutSuccessUrl("http://10.19.4.2:8080/realms/external/protocol/openid-connect/logout?redirect_uri=http://10.19.4.2:8081/"));
+
         return http.build();
     }
 }
