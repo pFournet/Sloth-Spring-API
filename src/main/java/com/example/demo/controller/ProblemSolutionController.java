@@ -58,10 +58,16 @@ public class ProblemSolutionController {
     }
 
     @PostMapping("/submit-problem-solution")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_CLIENT', 'ROLE_ADMIN')")
     public ResponseEntity<ProblemSolution> submitProblemSolution(@RequestBody ProblemSolution problemSolution) {
-        ProblemSolution savedSolution = repository.save(problemSolution);
-        return ResponseEntity.ok(savedSolution);
+        logger.info("Received problem solution for saving: {}", problemSolution);
+        try {
+            ProblemSolution savedSolution = repository.save(problemSolution);
+            return ResponseEntity.ok(savedSolution);
+        } catch (Exception e) {
+            logger.error("Error saving problem solution: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 }
